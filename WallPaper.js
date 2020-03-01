@@ -6,14 +6,26 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
-  Image
+  Image,
+  StatusBar
 } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
+import {
+  AntDesign,
+  Entypo,
+  Foundation,
+  Ionicons,
+  MaterialCommunityIcons,
+  EvilIcons
+} from "@expo/vector-icons";
+import BrickList from "react-native-masonry-brick-list";
+
 import Constants from "expo-constants";
 import * as FileSystem from "expo-file-system";
 import * as Permissions from "expo-permissions";
 import * as MediaLibrary from "expo-media-library";
 import { PermissionsAndroid } from "react-native";
-export default function WallPaper() {
+export default function WallPaper({ navigation }) {
   const [valid, setValid] = useState(false);
 
   useEffect(() => {
@@ -92,17 +104,42 @@ export default function WallPaper() {
       <FlatList
         style={{ marginBottom: 20, marginTop: 20 }}
         data={mang}
-        renderItem={({ item }) => (
-          <View style={styles.imgbox}>
-            <Text style={styles.titleImage}> {item.title}</Text>
-            <Image
-              style={{
-                width: 400,
-                height: 300,
-                marginLeft: 5
+        numColumns={2}
+        renderItem={({ item, index }) => (
+          <View>
+            {/* <Text style={styles.titleImage}> {item.title}</Text> */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("DetailsScreen", {
+                  url_l: item.url_l,
+                  height_l: item.height_l,
+                  width_l: item.width_l,
+                  url_z: item.url_z,
+                  height_z: item.height_z,
+                  width_z: item.width_z,
+                  url_m: item.url_m,
+                  height_m: item.height_m,
+                  width_m: item.width_m
+                });
               }}
-              source={{ uri: item.url_c }}
-            />
+            >
+              <Image
+                style={{
+                  borderRadius: 5,
+                  width: item.width_m,
+                  height: item.height_m,
+                  margin: 5
+                }}
+                source={{ uri: item.url_m }}
+              />
+              <View style={styles.views}>
+                <Ionicons name="md-eye" size={25} />
+                <Text style={{ color: "white", marginLeft: 5 }}>
+                  {item.views}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
             <TouchableOpacity
               style={styles.btn}
               onPress={() => {
@@ -119,7 +156,7 @@ export default function WallPaper() {
               />
             </TouchableOpacity>
 
-            <View style={styles.ngang}>
+            {/* <View style={styles.ngang}>
               <View style={styles.action}>
                 <Image
                   style={{ width: 30, height: 30, margin: 10 }}
@@ -129,10 +166,10 @@ export default function WallPaper() {
                   }}
                 />
                 <Text style={styles.nameac}>Like</Text>
-              </View>
+              </View> */}
 
-              <View style={styles.action}>
-                <Image 
+            {/* <View style={styles.action}>
+                <Image
                   style={{ width: 30, height: 30, margin: 10 }}
                   source={{
                     uri: "https://cdn.onlinewebfonts.com/svg/img_53862.png"
@@ -140,7 +177,17 @@ export default function WallPaper() {
                 />
                 <Text style={styles.nameac}>Comment</Text>
               </View>
-            </View>
+              <View style={styles.action}>
+                <Image
+                  style={{ width: 30, height: 30, margin: 10 }}
+                  source={{
+                    uri:
+                      "https://cdn4.iconfinder.com/data/icons/eyes-type-set/100/matane-10-512.png"
+                  }}
+                />
+                <Text style={styles.nameac}>{item.views}</Text>
+              </View> */}
+            {/* </View> */}
           </View>
         )}
         keyExtractor={item => item.id}
@@ -152,7 +199,7 @@ export default function WallPaper() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#333333",
     alignItems: "center",
     justifyContent: "center"
   },
@@ -172,8 +219,7 @@ const styles = StyleSheet.create({
   },
   ngang: {
     flexDirection: "row",
-    margin: 10,
-    
+    margin: 10
   },
   titleImage: {
     fontSize: 22,
@@ -183,12 +229,18 @@ const styles = StyleSheet.create({
   imgbox: {
     borderRadius: 15,
     backgroundColor: "#f5f5f5",
-    marginBottom: 20,
+    marginBottom: 20
   },
   action: {
-    flexDirection:'row'
+    flexDirection: "row"
   },
-  nameac:{
-    marginTop:10
+  nameac: {
+    marginTop: 10
+  },
+  views: {
+    flexDirection: "row",
+    position: "absolute",
+    marginTop: -30,
+    marginLeft: 10
   }
 });
