@@ -126,11 +126,11 @@ export default function WallPaper({ navigation }) {
               <Image
                 style={{
                   borderRadius: 5,
-                  width: item.width_m,
-                  height: item.height_m,
+                  width: 195,
+                  height: 130,
                   margin: 5
                 }}
-                source={{ uri: item.url_m }}
+                source={{ uri: item.url_c }}
               />
               <View style={styles.views}>
                 <Ionicons name="md-eye" size={25} />

@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Image,
+  Alert,
   Animated,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -12,14 +13,17 @@ import {
 
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { render } from "react-dom";
-
+import Constants from "expo-constants";
+import * as FileSystem from "expo-file-system";
+import * as Permissions from "expo-permissions";
+import * as MediaLibrary from "expo-media-library";
+import { PermissionsAndroid } from "react-native";
 export default class FloatingButton extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor(props, param) {
+    super(props, param);
     this.setState = {
       isValid: false
-    }
+    };
   }
 
   animation = new Animated.Value(0);
@@ -106,7 +110,7 @@ export default class FloatingButton extends Component {
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log("You can use the camera");
-          this.setState({isValid:true})
+          this.setState({ isValid: true });
         } else {
           console.log("Camera permission denied");
         }
@@ -122,7 +126,8 @@ export default class FloatingButton extends Component {
       FileSystem.downloadAsync(uri, fileUri)
         .then(({ uri }) => {
           MediaLibrary.saveToLibraryAsync(uri);
-          console.log(uri);
+          // console.log(uri);
+           Alert.alert('Saved')
         })
         .catch(error => {
           console.error(error);
@@ -132,32 +137,42 @@ export default class FloatingButton extends Component {
     return (
       <View style={(styles.container, this.props.style)}>
         <TouchableWithoutFeedback
+          // onPress={() => downloadImage(param.url_l)}
           onPress={() => downloadImage(this.props.url_l)}
+         
           accessible={true}
         >
           <Animated.View style={[styles.button, styles.secondary, hearStyle]}>
-            <AntDesign name="plus" size={24} color="#F02A4B" />
-            <Text style={{ color: "red", fontSize: 10 ,marginRight:150}}>
-              {this.props.first}
-            </Text>
+            {/* <Ionicons name="md-download" size={24} color="#F02A4B" /> */}
+            <Text style={{ fontSize: 9,color:'white' }}>1080x1920</Text>
+            {/* <Text style={{ color: "red", fontSize: 11 }}>{param.first}</Text> */}
           </Animated.View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
-          onPress={() => alert("second")}
+          // onPress={() => alert(param.url_z)}
+          onPress={() => downloadImage(this.props.url_l)}
           accessible={true}
         >
           <Animated.View style={[styles.button, styles.secondary, thumbStyle]}>
-            <AntDesign name="plus" size={24} color="#F02A4B" />
+            {/* <Ionicons name="md-download" size={24} color="#F02A4B" /> */}
+            <Text style={{ fontSize: 9, color: "white" }}>576x1024</Text>
+            {/* <Text style={{ color: "red", fontSize: 11 }}>
+              {this.props.second} */}
+            {/* </Text> */}
           </Animated.View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
+          onPress={() => downloadImage(this.props.url_l)}
           accessible={true}
-          onPress={() => alert("third")}
         >
           <Animated.View style={[styles.button, styles.secondary, pinStyle]}>
-            <AntDesign name="plus" size={24} color="#F02A4B" />
+            {/* <Ionicons name="md-download" size={24} color="#F02A4B" /> */}
+            {/* <Text style={{ color: "red", fontSize: 11 }}>
+              {this.props.third}
+            </Text> */}
+            <Text style={{ fontSize: 10, color: "white" }}>281x500</Text>
           </Animated.View>
         </TouchableWithoutFeedback>
 
@@ -199,10 +214,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F02A4B"
   },
   secondary: {
-    width: 40,
-    height: 40,
-    borderRadius: 40 / 2,
-    backgroundColor: "#FFF"
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2,
+    backgroundColor: "#F02A4B"
   }
 });
 {
